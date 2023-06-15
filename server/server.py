@@ -11,7 +11,7 @@ chunk_size = 200
 
 model_ckpt = "sentence-transformers/multi-qa-mpnet-base-dot-v1"
 tokenizer = AutoTokenizer.from_pretrained(model_ckpt)
-session = onnxruntime.InferenceSession("traced_bert.onnx")
+session = onnxruntime.InferenceSession("res/traced_bert.onnx")
 nltk.download('punkt')
 app = Flask(__name__)
 

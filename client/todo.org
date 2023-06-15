@@ -1,0 +1,7 @@
+* Tasks
+** [x] v0.0.1: Simple text scraper
+** [ ] v0.0.1: Enable for all sites
+** [ ] v0.0.1: On each page load, send scraped text to flask api
+** [ ] v0.0.1: UI: Search for websites
+** [ ] v0.0.2: Common site specific parsers, to clean input (reddit, hnews, Goog etc)
+** [ ] 

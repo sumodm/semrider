@@ -1,0 +1,26 @@
+{ "manifest_version": 3, 
+  "name": "Semantic Rider",
+  "description": "Basic Extension",
+  "version":"0.0.1",
+
+  "icons": {
+    "16": "images/feather_16.png",
+    "32": "images/feather_32.png",
+    "48": "images/feather_48.png",
+    "128": "images/feather_128.png"
+  },
+
+  "content_scripts": [
+    {
+      "js": ["scripts/content.js"],
+      "matches": [
+        //"https://*/",
+        //"http://*/"
+        "https://stackoverflow.com/*",
+        "https://developer.chrome.com/docs/extensions/*",
+        "https://developer.chrome.com/docs/webstore/*",
+        "https://news.ycombinator.com/*"
+      ]
+    }
+  ]
+}

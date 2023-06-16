@@ -53,9 +53,8 @@ def get_embeddings(text):
 def update():
     received_text = request.json.get('text')
     site = request.json.get('site')
-    print("GOT REQ")
-    print(received_text)
-    print(f'Received data: {site}')
+    print(f'Received Data: {received_text}')
+    print(f'Received site: {site}')
     embeds, sites, texts = load_files()
     sentences = sent_tokenize(received_text)
     idx = 0

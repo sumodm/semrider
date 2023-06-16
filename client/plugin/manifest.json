@@ -10,6 +10,10 @@
     "128": "images/feather_128.png"
   },
 
+  "background": {
+    "service_worker": "scripts/background.js"
+  },
+
   "content_scripts": [
     {
       "js": ["scripts/content.js"],
@@ -22,8 +26,9 @@
         //"https://news.ycombinator.com/*"
       ]
     }
-  ]
+  ],
 
-  //"permissions": ["http://localhost/*"]
+  "permissions" : ["scripting", "webNavigation"],
+  "host_permissions": ["http://localhost/*", "https://localhost/*"]
 
 }

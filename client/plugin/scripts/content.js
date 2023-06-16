@@ -44,7 +44,21 @@ while (curr = queue.pop()) {
 console.log(text_content);
 */
 
+/*
 var docs = document.body;
 var text = docs.innerText || docs.textContent;
 
 console.log(text);
+*/
+
+const textData = document.body.innerText;
+console.log(textData);
+
+fetch('http://localhost:5000/update', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ text: textData, site:document.location.href })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error(error));

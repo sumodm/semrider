@@ -14,13 +14,16 @@
     {
       "js": ["scripts/content.js"],
       "matches": [
-        //"https://*/",
-        //"http://*/"
-        "https://stackoverflow.com/*",
-        "https://developer.chrome.com/docs/extensions/*",
-        "https://developer.chrome.com/docs/webstore/*",
-        "https://news.ycombinator.com/*"
+        "https://*/*",
+        "http://*/*"
+        //"https://stackoverflow.com/*",
+        //"https://developer.chrome.com/docs/extensions/*",
+        //"https://developer.chrome.com/docs/webstore/*",
+        //"https://news.ycombinator.com/*"
       ]
     }
   ]
+
+  //"permissions": ["http://localhost/*"]
+
 }

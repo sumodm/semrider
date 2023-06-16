@@ -5,6 +5,7 @@ import onnxruntime
 import numpy as np
 import pickle
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 
 chunk_size = 200
@@ -14,6 +15,7 @@ tokenizer = AutoTokenizer.from_pretrained(model_ckpt)
 session = onnxruntime.InferenceSession("res/traced_bert.onnx")
 nltk.download('punkt')
 app = Flask(__name__)
+CORS(app)
 
 
 def load_files():
@@ -51,6 +53,9 @@ def get_embeddings(text):
 def update():
     received_text = request.json.get('text')
     site = request.json.get('site')
+    print("GOT REQ")
+    print(received_text)
+    print(f'Received data: {site}')
     embeds, sites, texts = load_files()
     sentences = sent_tokenize(received_text)
     idx = 0

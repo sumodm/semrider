@@ -6,16 +6,10 @@ import numpy as np
 import pickle
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import atexit
 
 
 chunk_size = 200
-
-model_ckpt = "sentence-transformers/multi-qa-mpnet-base-dot-v1"
-tokenizer = AutoTokenizer.from_pretrained(model_ckpt)
-session = onnxruntime.InferenceSession("res/traced_bert.onnx")
-nltk.download('punkt')
-app = Flask(__name__)
-CORS(app)
 
 
 def load_files():
@@ -35,10 +29,13 @@ def load_files():
     return embeds, sites, texts
 
 
-def dump_files(embeds, sites, texts):
-    pickle.dump(embeds, open("embeds.pkl", "wb"))
-    pickle.dump(sites, open("sites.pkl", "wb"))
-    pickle.dump(texts, open("texts.pkl", "wb"))
+model_ckpt = "sentence-transformers/multi-qa-mpnet-base-dot-v1"
+tokenizer = AutoTokenizer.from_pretrained(model_ckpt)
+session = onnxruntime.InferenceSession("res/traced_bert.onnx")
+nltk.download('punkt')
+app = Flask(__name__)
+CORS(app)
+embeds, sites, texts = load_files()
 
 
 def get_embeddings(text):
@@ -47,6 +44,13 @@ def get_embeddings(text):
                   "attention_mask" : np.array(embedded_text["attention_mask"]).reshape(1,-1)}
     ort_outputs = session.run(None, ort_inputs)
     return ort_outputs[0]
+
+
+@atexit.register
+def dump_files():
+    pickle.dump(embeds, open("embeds.pkl", "wb"))
+    pickle.dump(sites, open("sites.pkl", "wb"))
+    pickle.dump(texts, open("texts.pkl", "wb"))
 
 
 @app.route('/update', methods=['POST'])
@@ -78,7 +82,6 @@ def update():
             embeds = get_embeddings(text)
         else:
             embeds = np.vstack([embeds, get_embeddings(text)])
-    dump_files(embeds, sites, texts)
     return jsonify({'success': True})
 
 
@@ -89,9 +92,17 @@ def search():
     number_of_results = int(request.json.get('number_of_results'))
     question_embed = get_embeddings(question)
     similarities = embeds.dot(question_embed.T)
-    top_indices = np.argsort(similarities.flatten())[-number_of_results:][::-1]
-    top_context = [texts[i] for i in top_indices]
-    top_sites = [sites[i] for i in top_indices]
+    top_indices = np.argsort(similarities.flatten())[-(number_of_results * 10):][::-1]
+    urls_picked = set()
+    top_context = []
+    top_sites = []
+    for i in top_indices:
+        if len(top_context) >= number_of_results:
+            break
+        if sites[i] not in urls_picked:
+            urls_picked.add(sites[i])
+            top_context.append(texts[i])
+            top_sites.append(sites[i])
     return jsonify({'top_sites': top_sites, 'top_context': top_context})
 
 

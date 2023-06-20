@@ -37,10 +37,16 @@ function displayResults(top_sites, top_context) {
     var item = top_sites[i];
     var value = top_context[i];
 
-    var resultElement = document.createElement('div');
-    resultElement.textContent = 'Site: ' + item;
+    var resultNumb = document.createElement('div');
+    resultNumb.textContent = (i+1) + '. ';
     //, Matches: ' + value;
 
-    resultsContainer.appendChild(resultElement);
+    var resultText = document.createElement('a');
+    var createAText = document.createTextNode(item);
+    resultText.setAttribute('href', item);
+    resultText.appendChild(createAText);
+
+    resultsContainer.appendChild(resultNumb).appendChild(resultText);
+    //resultsContainer.appendChild(resultText);
   }
 }

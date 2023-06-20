@@ -3,17 +3,17 @@
 ** [x] v0.0.1: Enable for all sites
 ** [x] v0.0.1: On each page load, send scraped text to flask api
 ** [x] v0.0.1: UI: Search for websites
-** [ ] v0.0.2: UI: Beautify the UI, Show keywords cleanly, show search button, results cleanly etc
-** [ ] v0.0.2: UI: Show results with numbering, make it clickable etc
-** [ ] v0.0.2: SR: Remove the load and save to outside, should save before crash/exit
-** [ ] v0.0.2: SR: Store and send back page title
-** [ ] v0.0.2: UI: Save the page title, show page title as description
-** [ ] v0.0.2: UI: Move from popup to a full page plugin
-** [ ] v0.0.2: UI: HistoryExport Button + History export to API
-** [ ] v0.0.2: UI: TabManager Export Button + Tab manager export to API
-** [ ] v0.0.2: SR: Remove duplicate URLS
-** [ ] v0.0.2: UI: Send datetime as well
-** [ ] v0.0.2: SR: Store datetime and return with datetime
-** [ ] v0.0.2: Common site specific parsers, to clean input (reddit, hnews, Goog etc)
-** [ ] v0.0.2: AL: Testing the result quality
-** [ ] v0.0.2: AL:
+** [x] v0.0.2: UI: Beautify the UI, Show keywords cleanly, show search button, results cleanly etc
+** [x] v0.0.2: UI: Show results with numbering, make it clickable etc
+** [x] v0.0.2: SR: Remove the load and save to outside, should save before crash/exit
+** [ ] v0.0.3: SR: Store and send back page title
+** [ ] v0.0.3: UI: Save the page title, show page title as description
+** [ ] v0.0.3: UI: Move from popup to a full page plugin
+** [ ] v0.0.3: UI: HistoryExport Button + History export to API
+** [ ] v0.0.3: UI: TabManager Export Button + Tab manager export to API
+** [ ] v0.0.3: SR: Remove duplicate URLS
+** [ ] v0.0.3: UI: Send datetime as well
+** [ ] v0.0.3: SR: Store datetime and return with datetime
+** [ ] v0.0.3: Common site specific parsers, to clean input (reddit, hnews, Goog etc)
+** [ ] v0.0.3: AL: Testing the result quality
+** [ ] v0.0.3: AL:

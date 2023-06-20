@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-import json
+from algo import get_embeddings, top_results
 
 
 urls = [ ["http://paulgraham.com/getideas.html", 'startup-blog'], 
@@ -90,15 +90,17 @@ if __name__ == '__main__':
     score = 0
     for idx, test in enumerate(tests):
         print("IDX: ", idx)
-        data = {"question": test, "number_of_results": str(num_of_results)}
-        res = requests.post("http://127.0.0.1:5000/search", json=data)
-        try:
-            result = json.loads(res.text)
-        except ValueError as e:
-            print("IDX: ", idx, " Error parsing result json")
-            continue
-        if tests[test] in result['top_sites']:
+        question_embed = get_embeddings(test)
+        results = top_results(question_embed, num_of_results)
+        #data = {"question": test, "number_of_results": str(num_of_results)}
+        #res = requests.post("http://127.0.0.1:5000/search", json=data)
+        #try:
+        #    result = json.loads(res.text)
+        #except ValueError as e:
+        #    print("IDX: ", idx, " Error parsing result json")
+        #    continue
+        if tests[test] in results['top_sites']:
             score += 1
         else:
-            print(test, result['top_sites'])
+            print(test, results['top_sites'])
     print(score/len(tests))

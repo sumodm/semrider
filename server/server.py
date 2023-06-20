@@ -11,7 +11,6 @@ import atexit
 
 chunk_size = 200
 
-
 def load_files():
     try:
         embeds = pickle.load(open("embeds.pkl", "rb"))
@@ -55,11 +54,12 @@ def dump_files():
 
 @app.route('/update', methods=['POST'])
 def update():
+    global embeds, sites, texts
     received_text = request.json.get('text')
     site = request.json.get('site')
     print(f'Received Data: {received_text}')
     print(f'Received site: {site}')
-    embeds, sites, texts = load_files()
+    #embeds, sites, texts = load_files()
     sentences = sent_tokenize(received_text)
     idx = 0
     text = ""
@@ -87,7 +87,8 @@ def update():
 
 @app.route('/search', methods=['POST'])
 def search():
-    embeds, sites, texts = load_files()
+    global embeds, sites, texts
+    #embeds, sites, texts = load_files()
     question = request.json.get('question')
     number_of_results = int(request.json.get('number_of_results'))
     question_embed = get_embeddings(question)

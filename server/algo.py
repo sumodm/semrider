@@ -83,11 +83,11 @@ def top_results(query_embedding, num_of_results=5, embeds_arg=None, sites_arg=No
     top_context = []
     top_sites = []
     for i in top_idx:
-        if len(top_context) >= num_of_results:
+        if len(top_sites) >= num_of_results:
             break
         if sites[i] not in urls_picked:
             urls_picked.add(sites[i])
-            top_context.append(texts[i])
+            #top_context.append(texts[i])
             top_sites.append(sites[i])
     return {'top_sites': top_sites, 'top_context': top_context}
 

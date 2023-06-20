@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import atexit
-from server.algo import get_embeddings, top_results, insert_embeddings, dump_data
+from algo import get_embeddings, top_results, insert_embeddings, dump_data
 import signal
 
 

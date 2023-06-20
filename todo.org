@@ -8,7 +8,7 @@
 ** [x] v0.0.2: SR: Remove the load and save to outside, should save before crash/exit
 ** [ ] v0.0.x: SR: AtExit does not seem to work if you: trap signals:
          https://stackoverflow.com/questions/40866576/run-atexit-when-python-process-is-killed)
-** [ ] v0.0.x: AL: Add 1000 urls, save both train and test data as embeddings, test code
+** [x] v0.0.x: AL: Add 1000 urls, save both train and test data as embeddings, test code
 ** [ ] v0.0.x: AL: Metrics: Top 5 Errors, Multicategory error 
 ** [ ] v0.0.x: AL: Error characterization for 100 test urls
 ** [ ] v0.0.x: AL: Refactor search, separate function to handle search with embedding

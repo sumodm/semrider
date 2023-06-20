@@ -1,3 +1,4 @@
 *.onnx
 *.h5
 *.bin
+scratch/*

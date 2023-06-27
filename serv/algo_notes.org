@@ -1,0 +1,37 @@
+* Given train-embeds, test_embeds, optional recompute, train_data_file, test_data_file
+*** prepare train and test data
+***** if embeds-file exists,
+******* just load data and return
+***** if file not exists or recompute
+******* compute train_embed_data
+********* Get HTML from url
+********* Get text from HTML
+********* Chunk and add all chunks
+
+
+* Info Arch
+**  Design 1: Store sites separately and embeddings separately
+ # Train File  : {sites, embeddings}
+ # Test  File  : {[site, phrase, topic], embeddings} TODO: Make inner array ordered dict if needed
+ # Issues1: how to handle chunked embeddings etc
+** Design 2: Handles chunkced data, indexes keep track of of all chuncks for a url and rev map to find url of embd
+ # Train File2 : mapurl = {fwd: {url, [indexes]}, , embeddings = []
+ # Test  File2 : meta = {site:[phrase, topic]}, mapurl = { fwd:{url:[indexes]}, rev:{index:url}}, embeddings = []
+ # Issue 1: Too many data files to be persisted, how to handle train/test/prod etc
+ # Issue 2: How to handle prod, scalability when data needs to be updated etc
+** Design 3: 
+ # Train File3: meta = OrderedDict({site:{kword:'keyword', topic:'topic', label:'label;, indexes=[indexes]]}), embeddings, revmap[site]
+ # Test  File3: Same as above (label is test, has keyword and topic)
+ # Prod  File : Same as above (label is prod)
+
+* Decisions (Do the insert_largetext, as it is simpler)
+** Insert vs Embed large text
+*** Insert into class as part of pipeline: insert_largetext
+**** Adv: Class manages the embedded data
+**** Dis: Can't do test for small data, without instantiating the class
+*** Insert into class explictly: embed_largetext
+**** Adv: Easier to test, as you can just provide a set of embeddings and test it
+**** Dis: More hairier to implement, not sure if this is worth it
+** get_embedding: Exposing this for small phrase embedding, like keywords for search
+** 
+** 

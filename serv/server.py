@@ -1,8 +1,8 @@
+import signal
+import atexit
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import atexit
-from algo import get_embeddings, top_results, insert_embeddings, dump_data
-import signal
+import serv.algo as al
 
 
 app = Flask(__name__)
@@ -10,7 +10,7 @@ CORS(app)
 
 
 def dump_files(*args):
-    dump_data()
+    al.dump_data()
     exit()
 
 
@@ -20,7 +20,7 @@ def update():
     site = request.json.get('site')
     print(f'Received Data: {received_text}')
     print(f'Received site: {site}')
-    if insert_embeddings(received_text, site):
+    if al.insert_embeddings(received_text, site):
         return jsonify({'status': 'success'})
     else:
         return jsonify({'status': 'failed'})
@@ -30,8 +30,8 @@ def update():
 def search():
     question = request.json.get('question')
     number_of_results = int(request.json.get('number_of_results'))
-    question_embed = get_embeddings(question)
-    results = top_results(question_embed, number_of_results)
+    question_embed = al.get_embeddings(question)
+    results = al.top_results(question_embed, number_of_results)
     return jsonify(results)
 
 

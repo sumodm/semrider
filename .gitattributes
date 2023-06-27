@@ -1,1 +1,6 @@
 tests/100_test_samples.csv filter=lfs diff=lfs merge=lfs -text
+serv/data/test.csv filter=lfs diff=lfs merge=lfs -text
+serv/data/100_test_samples.csv filter=lfs diff=lfs merge=lfs -text
+serv/data/hn_url_gt_100.csv filter=lfs diff=lfs merge=lfs -text
+serv/data/confsbl_hn_url_gt_100.csv filter=lfs diff=lfs merge=lfs -text
+serv/data/eval_100_samples.csv filter=lfs diff=lfs merge=lfs -text

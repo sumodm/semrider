@@ -8,16 +8,16 @@ from nltk.tokenize import sent_tokenize
 
 def load_files():
     try:
-        embeds = pickle.load(open("embeds.pkl", "rb"))
+        embeds = pickle.load(open("serv/res/embeds.pkl", "rb"))
         embeds = np.array(embeds).reshape(len(embeds), -1)
     except FileNotFoundError:
         embeds = np.array([])
     try:
-        sites = pickle.load(open("sites.pkl", "rb"))
+        sites = pickle.load(open("serv/res/sites.pkl", "rb"))
     except FileNotFoundError:
         sites = []
     try:
-        texts = pickle.load(open("texts.pkl", "rb"))
+        texts = pickle.load(open("serv/res/texts.pkl", "rb"))
     except FileNotFoundError:
         texts = []
     return embeds, sites, texts
@@ -26,7 +26,7 @@ def load_files():
 nltk.download('punkt')
 model_ckpt = "sentence-transformers/multi-qa-mpnet-base-dot-v1"
 tokenizer = AutoTokenizer.from_pretrained(model_ckpt)
-session = ort.InferenceSession("res/traced_bert.onnx")
+session = ort.InferenceSession("serv/res/traced_bert.onnx")
 embeds, sites, texts = load_files()
 
 
@@ -93,6 +93,6 @@ def top_results(query_embedding, num_of_results=5, embeds_arg=None, sites_arg=No
 
 
 def dump_data():
-    pickle.dump(embeds, open("embeds.pkl", "wb"))
-    pickle.dump(sites, open("sites.pkl", "wb"))
-    pickle.dump(texts, open("texts.pkl", "wb"))
+    pickle.dump(embeds, open("serv/res/embeds.pkl", "wb"))
+    pickle.dump(sites, open("serv/res/sites.pkl", "wb"))
+    pickle.dump(texts, open("serv/res/texts.pkl", "wb"))

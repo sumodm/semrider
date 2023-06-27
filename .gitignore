@@ -2,3 +2,6 @@
 *.h5
 *.bin
 scratch/*
+client/plugin3/*
+client/plugin4/*
+*/__pycache__/*

@@ -172,7 +172,7 @@ class S2PSimilarity:
         top_k_urls = []
         for idx, item in enumerate(top_idxs):
             print(str(idx) + " " + str(top_scores[idx]) + " " + self.rev_data[item])
-            top_k_urls.append(self.rev_data[item])
+            top_k_urls.append((self.rev_data[item], ''))       # TODO: Update the '' with actual title
  
         #top_idxs = np.argsort(scores.flatten())
         return top_idxs, top_k_urls
@@ -182,5 +182,5 @@ class S2PSimilarity:
         '''
         for test in eval_phrases:
             test_embed_data = sim_evltr.get_embedding(test)
-        results = map(test_embed_data, sim_valtr.find_phrase(x, k_val=5))
-        return results	
+        top_idxs, top_urls = map(test_embed_data, sim_valtr.find_phrase(x, k_val=5))
+        return top_urls

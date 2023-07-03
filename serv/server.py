@@ -2,15 +2,17 @@ import signal
 import atexit
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import serv.algo2 as alg
+import serv.semrider as sm
 
 
 app = Flask(__name__)
 CORS(app)
-alg.load_data()
+embed_file = "serv/res/embed_train_v02_rc.pkl"
+meta_file = "serv/res/meta_train_v02_rc.pkl"
+sm.load_data(embed_file, meta_file)
 
 def dump_files(*args):
-    alg.save_data()
+    sm.save_data()
     exit()
 
 
@@ -20,7 +22,7 @@ def update():
     site = request.json.get('site')
     print(f'Received Data: {received_text}')
     print(f'Received site: {site}')
-    if alg.update(received_text, site):
+    if sm.update(site, received_text):
         return jsonify({'status': 'success'})
     else:
         return jsonify({'status': 'failed'})
@@ -30,7 +32,8 @@ def update():
 def search():
     question = request.json.get('question')
     number_of_results = int(request.json.get('number_of_results'))
-    results = alg.find(question)
+    results = sm.find(question, number_of_results)
+    results = {'top_sites': [u for u,t in results], 'top_context': [t for u,t in results]}
     return jsonify(results)
 
 

@@ -78,7 +78,7 @@ def test_algo():
             test_pred_data, top_k_urls = sim_evltr.find_phrase(embd_data, k_val=5)
             test_meta_data.extend([test_url, test_topic, test_kwords, test_pred_data])
             
-            if test_url in top_k_urls:
+            if test_url in [u for u,t in top_k_urls]:
                 total_correct += 1
             total += 1
 

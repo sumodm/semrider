@@ -1,30 +1,47 @@
 * Tasks
-** [x] v0.0.1: Simple text scraper
-** [x] v0.0.1: Enable for all sites
-** [x] v0.0.1: On each page load, send scraped text to flask api
-** [x] v0.0.1: UI: Search for websites
-** [x] v0.0.2: UI: Beautify the UI, Show keywords cleanly, show search button, results cleanly etc
-** [x] v0.0.2: UI: Show results with numbering, make it clickable etc
-** [x] v0.0.2: SR: Remove the load and save to outside, should save before crash/exit
-** [ ] v0.0.x: SR: AtExit does not seem to work if you: trap signals:
-         https://stackoverflow.com/questions/40866576/run-atexit-when-python-process-is-killed)
-** [x] v0.0.x: AL: Add 1000 urls, save both train and test data as embeddings, test code
-** [ ] v0.0.x: AL: Metrics: Top 5 Errors, Multicategory error 
-** [x] v0.0.x: AL: Fix paths for relative imports
-** [ ] v0.0.x: AL: Fix code to have accurate results (1100)
-** [ ] v0.0.x: AL: Error characterization for 100 test urls
-** [ ] v0.0.x: AL: Refactor search, separate function to handle search with embedding
-** [ ] v0.0.x: SR: Add class struct, init with test data from test and real data from server.py
-                   - Handle all in clean formats, train, test, production
-** [ ] v0.0.x: AL:
-** [ ] v0.0.x: SR: Store and send back page title
-** [ ] v0.0.x: UI: Save the page title, show page title as description
-** [ ] v0.0.x: UI: Move from popup to a full page plugin
-** [ ] v0.0.x: UI: HistoryExport Button + History export to API
-** [ ] v0.0.x: UI: TabManager Export Button + Tab manager export to API
-** [ ] v0.0.x: SR: Remove duplicate URLS
-** [ ] v0.0.x: UI: Send datetime as well
-** [ ] v0.0.x: SR: Store datetime and return with datetime
-** [ ] v0.0.x: Common site specific parsers, to clean input (reddit, hnews, Goog etc)
-** [ ] v0.0.x: AL: Testing the result quality
-** [ ] v0.0.x: AL:
+** v0.0.1: First, Simple version
+*** [x] v0.0.1: Simple text scraper
+*** [x] v0.0.1: Enable for all sites
+*** [x] v0.0.1: On each page load, send scraped text to flask api
+*** [x] v0.0.1: UI: Search for websites
+** v0.0.2: Beautify UI, show decently structured results
+*** [x] v0.0.2: UI: Beautify the UI, Show keywords cleanly, show search button, results cleanly etc
+*** [x] v0.0.2: UI: Show results with numbering, make it clickable etc
+*** [x] v0.0.2: SR: Remove the load and save to outside, should save before crash/exit
+** v0.0.3: Refactored version, with accurate results, metrics, dataset etc
+*** [.] v0.0.3: MJ: Refactor Code Base
+**** [x] v0.0.3: AL: Refactor search, separate function to handle search with embedding
+**** [x] v0.0.3: SR: Add class struct, init with test data from test and real data from server.py
+                    - Handle all in clean formats, train, test, production
+**** [x] v0.0.3: SR: Save extracted data on disk
+**** [x] v0.0.3: SR: Save extracted data, chunked data every 100 or so iters
+**** [x] v0.0.3: AL: Add 1000 urls, save both train and test data as embeddings, test code
+**** [x] v0.0.3: AL: Fix paths for relative imports
+**** [x] v0.0.3: AL: Save crawled url text
+**** [x] v0.0.3: AL: Fix code to have accurate results (1100)
+**** [ ] v0.0.3: SR: AtExit does not seem to work if you: trap signals:
+          https://stackoverflow.com/questions/40866576/run-atexit-when-python-process-is-killed)
+**** [ ] v0.0.3: AL: Move test code into separate test_algo.py
+**** [ ] v0.0.3: AL: Complete production use case code and test thoroughly
+**** [ ] v0.0.3: AL: Move production code to server.py
+**** [ ] v0.0.3: AL: Remove deadcode and files
+**** [ ] v0.0.3: SR: Store and send back page title
+*** [x] v0.0.3: AL: Error Categorization: Top 5 is 90%, 100 GT, 1000 Confusables, so paused
+**** [x] v0.0.3: AL: Metrics: Top 5 Errors, Multicategory error: 
+**** [ ] v0.0.3: AL: Error characterization for 100 test urls
+** Bucket List
+*** [ ] v0.0.x: UI: Save the page title, show page title as description
+*** [ ] v0.0.x: UI: Move from popup to a full page plugin
+*** [ ] v0.0.x: UI: HistoryExport Button + History export to API
+*** [ ] v0.0.x: UI: TabManager Export Button + Tab manager export to API
+*** [ ] v0.0.x: SR: Remove duplicate URLS
+*** [ ] v0.0.x: UI: Send datetime as well
+*** [ ] v0.0.x: SR: Store datetime and return with datetime
+*** [ ] v0.0.x: Common site specific parsers, to clean input (reddit, hnews, Goog etc)
+*** [ ] v0.0.x: AL: Testing the result quality
+*** [ ] v0.0.x: AL: Reduce space usage, optimize the chunking size
+*** [ ] v0.0.x: AL: Improve 'find' speed further, should respond E2E in 200-300ms
+*** [ ] v0.0.x: AL: Improve 'index' speed further, now takes 10hrs for 1000 urls
+*** [ ] v0.0.x: AL: Add HN parser (remove extraneous stuff)
+*** [ ] v0.0.x: AL: Add Confluence parser
+*** [ ] v0.0.x: AL: 

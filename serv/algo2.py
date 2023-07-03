@@ -15,7 +15,7 @@ class S2PSimilarity:
     def __init__(self, model_file, ort_format):
         '''
            embed_data = array/np.array of embeddings
-           meta_data = OrderedDict({url:{kword:'keyword', topic:'topic', label:'label;, indexes=[indexes]]}
+           meta_data = OrderedDict({url:{kwords:'keyword', topic:'topic', label:'label;, indexes=[indexes]]}
            rev_map = maps index_id -> url
            url can later be paths/file resource handler etc as well
         '''
@@ -45,6 +45,7 @@ class S2PSimilarity:
 
         try:
             self.meta_data = pkl.load(open(meta_file, "rb"))
+            self.rev_data = {idx:key for key,value in self.meta_data.items() for idx in value['emd_indxs']}
         except FileNotFoundError:
             status = False
 
@@ -71,10 +72,21 @@ class S2PSimilarity:
         return status
 
 
+    def is_url_indexed(self, url):
+        ''' Check if given url is already indexed
+        '''
+        if url in self.meta_data:
+            ##TODO: Temprorary, remove
+            #if self.meta_data[url]['emd_indxs'] == []:
+            #    return False
+            return True
+        else:
+            return False
 
-    def get_info(self, index):
+    def check_info(self, index):
         ''' Given embedding index, return all meta info about it
         '''
+        return self.rev_data[index]
 
     def get_embedding(self, text):
         ''' Given text, return embedding
@@ -125,8 +137,8 @@ class S2PSimilarity:
         '''
         
         # Check if url is already inserted
-        if url in self.meta_data:
-            return False
+        #if url in self.meta_data:
+        #    return False
 
         # Chunk the text
         chunks = self._chunk_text(text)
@@ -136,9 +148,9 @@ class S2PSimilarity:
         embd_len = len(self.embed_data)
         curr_indx = max(0, embd_len-1)
         self.meta_data[url] = meta_data_value             # Update initial params, indexes updated later
-        indxs = list(range(curr_indx, chunks_len))        # curr_indx -> curr_idx + chunks_len
+        indxs = list(range(curr_indx+1, curr_indx+chunks_len+1))        # curr_indx -> curr_idx + chunks_len
         self.meta_data[url]['emd_indxs'].extend(indxs)
-        self.rev_data.update({idx:url for idx in range(curr_indx, curr_indx + chunks_len)})
+        self.rev_data.update({idx:url for idx in range(curr_indx+1, curr_indx + chunks_len+1)})
 
         # Compute embeddings and save it
         chunkes_gen = map(self.get_embedding, chunks)          # compute embedding for the chunks
@@ -156,6 +168,16 @@ class S2PSimilarity:
             params      : List of string params one wants back, eg: topic, 
             return      : Tuples of site, index in embedding, sim_score
         '''
+        scores = self.embed_data.dot(phrase_embed.T)
+        top_idxs = np.argsort(-np.max(scores, axis=1))[:k_val] #Get max of all chunks in kword & neg for descending
+        top_scores = np.sort(-np.max(scores, axis=1))[:k_val]
+        top_k_urls = []
+        for idx, item in enumerate(top_idxs):
+            print(str(idx) + " " + str(top_scores[idx]) + " " + self.rev_data[item])
+            top_k_urls.append(self.rev_data[item])
+ 
+        #top_idxs = np.argsort(scores.flatten())
+        return top_idxs, top_k_urls
 
     def test_phrases(self, eval_phrases, eval_embedding, eval_sites):
         ''' Given a set of eval phrases, find closest items and report metrics
@@ -170,33 +192,82 @@ if __name__ == "__main__":
     # C1: Case of Testing, Init
     model_file = "sentence-transformers/multi-qa-mpnet-base-dot-v1"
     ort_format = "serv/res/traced_bert.onnx"
-    embed_file = "serv/res/embed_train.pkl"
-    meta_file = "serv/res/meta_train.pkl"
+    embed_file = "serv/res/embed_train_v02_rc.pkl"
+    meta_file = "serv/res/meta_train_v02_rc.pkl"
     confsbl_file = "serv/data/confsbl_hn_url_gt_100.csv"
     eval_file = "serv/data/eval_100_samples.csv"
+    rawdata_file = "serv/data/rawtext.csv"
     sim_evltr = S2PSimilarity(model_file, ort_format)
+    DO_ADD_TRAIN = False
+    DO_ADD_TEST = False
+    DO_EVAL = True
 
-    ### C1: Insert/Load Training data (both confusable content and eval content)
+    # C1: Insert/Load Training data (both confusable content and eval content)
     sim_evltr.load_data(embed_file, meta_file)                 # Load previously embedded data
 
     # C1: Insert/Load Training data (add new data)
-    for idx,row in enumerate(iops.lazy_csv_reader(confsbl_file)):
-        if idx == 1000:
-            break
-        url = row[0]                                           # Url
-        print("Processing ", idx,": ", url)
-        meta_data_value =  {'label':'train', 'emd_indxs':[]}
-        status, text = iops.extract_text_from_url(url)
-        if not status: 
-            print("Error in extracting text")
-            continue
-        sim_evltr.insert_largetext(url, meta_data_value, text) # Load new corpus of data
+    if DO_ADD_TRAIN:
+        for idx,row in enumerate(iops.lazy_csv_reader(confsbl_file)):
+            if idx == 1000:
+                break
+            url = row[0]                                           # Url
+            if sim_evltr.is_url_indexed(url):
+                print("NotProcess Test Doc", idx,": ", url)
+                continue
+            print("Processing Train Doc", idx,": ", url)
+            meta_data_value =  {'label':'train', 'emd_indxs':[]}
+            status, text = iops.extract_text_from_url(url)
+            if not status: 
+                print("Error in extracting text")
+                continue
+            sim_evltr.insert_largetext(url, meta_data_value, text) # Load new corpus of data
+            iops.csv_writer(rawdata_file, url + " , " + repr(text) + "\n")
 
-    sim_evltr.save_data(embed_file, meta_file)
+            if idx % 100 == 0:                                     # Save data after every 1000
+                sim_evltr.save_data(embed_file, meta_file)
+
+        sim_evltr.save_data(embed_file, meta_file)
+
+    # C1: Insert/Load Test data
+    if DO_ADD_TEST:
+        for idx, row in enumerate(iops.lazy_csv_reader(eval_file)):
+            url = row[0]
+            topic = row[1]
+            kwords = row[2]
+            if sim_evltr.is_url_indexed(url):
+                print("NotProcess Test Doc", idx,": ", url)
+                continue
+            print("Processing Test Doc", idx,": ", url)
+            meta_data_value = {'label':'test', 'kwords':kwords, 'topic':topic, 'emd_indxs':[]}
+            status, text = iops.extract_text_from_url(url)
+            if not status:
+                print("Error in extracting text")
+                continue
+            sim_evltr.insert_largetext(url, meta_data_value, text)
+
+        sim_evltr.save_data(embed_file, meta_file)
 
     ### C1: For a set of phrases or their embedding, find similarity and get metrics
-    ##sim_evltr.test_phrases()
+    if DO_EVAL:
+        embd_dim = 768
+        test_embed_data = np.empty((0, embd_dim))
+        test_meta_data = []
+        total_correct = 0
+        total = 0
+        for idx, row in enumerate(iops.lazy_csv_reader(eval_file)):
+            test_url = row[0]
+            test_topic = row[1]
+            test_kwords = row[2]
+            embd_data = sim_evltr.get_embedding(test_kwords)
+            test_embed_data = np.vstack([test_embed_data, embd_data])
+            test_pred_data, top_k_urls = sim_evltr.find_phrase(embd_data, k_val=5)
+            test_meta_data.extend([test_url, test_topic, test_kwords, test_pred_data])
+            
+            if test_url in top_k_urls:
+                total_correct += 1
+            total += 1
 
+        print(100*total_correct/total)
     ### C2: Case of Prod Use, Init
     ##model_file = "sentence-transformers/multi-qa-mpnet-base-dot-v1"
     ##ort_format = "serv/res/traced_bert.onnx"

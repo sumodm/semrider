@@ -12,6 +12,12 @@ def lazy_csv_reader(csvfile):
       yield row
 
 
+def csv_writer(csvfile, text):
+  with open(csvfile, 'a') as file: 
+    file.write(text)
+    file.close()
+
+
 def extract_text_from_url(url):
     ''' Extract text from html
         Returns

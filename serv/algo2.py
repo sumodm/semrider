@@ -1,12 +1,10 @@
 from collections import OrderedDict
-import pickle
+import pickle as pkl
 import numpy as np
 import nltk
 from nltk.tokenize import sent_tokenize
 from transformers import AutoTokenizer
 import onnxruntime as ort
-import serv.iops as iops
-import pickle as pkl
 
 
 class S2PSimilarity:
@@ -185,105 +183,4 @@ class S2PSimilarity:
         for test in eval_phrases:
             test_embed_data = sim_evltr.get_embedding(test)
         results = map(test_embed_data, sim_valtr.find_phrase(x, k_val=5))
-        return results
-
-if __name__ == "__main__":
-
-    # C1: Case of Testing, Init
-    model_file = "sentence-transformers/multi-qa-mpnet-base-dot-v1"
-    ort_format = "serv/res/traced_bert.onnx"
-    embed_file = "serv/res/embed_train_v02_rc.pkl"
-    meta_file = "serv/res/meta_train_v02_rc.pkl"
-    confsbl_file = "serv/data/confsbl_hn_url_gt_100.csv"
-    eval_file = "serv/data/eval_100_samples.csv"
-    rawdata_file = "serv/data/rawtext.csv"
-    sim_evltr = S2PSimilarity(model_file, ort_format)
-    DO_ADD_TRAIN = False
-    DO_ADD_TEST = False
-    DO_EVAL = True
-
-    # C1: Insert/Load Training data (both confusable content and eval content)
-    sim_evltr.load_data(embed_file, meta_file)                 # Load previously embedded data
-
-    # C1: Insert/Load Training data (add new data)
-    if DO_ADD_TRAIN:
-        for idx,row in enumerate(iops.lazy_csv_reader(confsbl_file)):
-            if idx == 1000:
-                break
-            url = row[0]                                           # Url
-            if sim_evltr.is_url_indexed(url):
-                print("NotProcess Test Doc", idx,": ", url)
-                continue
-            print("Processing Train Doc", idx,": ", url)
-            meta_data_value =  {'label':'train', 'emd_indxs':[]}
-            status, text = iops.extract_text_from_url(url)
-            if not status: 
-                print("Error in extracting text")
-                continue
-            sim_evltr.insert_largetext(url, meta_data_value, text) # Load new corpus of data
-            iops.csv_writer(rawdata_file, url + " , " + repr(text) + "\n")
-
-            if idx % 100 == 0:                                     # Save data after every 1000
-                sim_evltr.save_data(embed_file, meta_file)
-
-        sim_evltr.save_data(embed_file, meta_file)
-
-    # C1: Insert/Load Test data
-    if DO_ADD_TEST:
-        for idx, row in enumerate(iops.lazy_csv_reader(eval_file)):
-            url = row[0]
-            topic = row[1]
-            kwords = row[2]
-            if sim_evltr.is_url_indexed(url):
-                print("NotProcess Test Doc", idx,": ", url)
-                continue
-            print("Processing Test Doc", idx,": ", url)
-            meta_data_value = {'label':'test', 'kwords':kwords, 'topic':topic, 'emd_indxs':[]}
-            status, text = iops.extract_text_from_url(url)
-            if not status:
-                print("Error in extracting text")
-                continue
-            sim_evltr.insert_largetext(url, meta_data_value, text)
-
-        sim_evltr.save_data(embed_file, meta_file)
-
-    ### C1: For a set of phrases or their embedding, find similarity and get metrics
-    if DO_EVAL:
-        embd_dim = 768
-        test_embed_data = np.empty((0, embd_dim))
-        test_meta_data = []
-        total_correct = 0
-        total = 0
-        for idx, row in enumerate(iops.lazy_csv_reader(eval_file)):
-            test_url = row[0]
-            test_topic = row[1]
-            test_kwords = row[2]
-            embd_data = sim_evltr.get_embedding(test_kwords)
-            test_embed_data = np.vstack([test_embed_data, embd_data])
-            test_pred_data, top_k_urls = sim_evltr.find_phrase(embd_data, k_val=5)
-            test_meta_data.extend([test_url, test_topic, test_kwords, test_pred_data])
-            
-            if test_url in top_k_urls:
-                total_correct += 1
-            total += 1
-
-        print(100*total_correct/total)
-    ### C2: Case of Prod Use, Init
-    ##model_file = "sentence-transformers/multi-qa-mpnet-base-dot-v1"
-    ##ort_format = "serv/res/traced_bert.onnx"
-    ##embed_file = "serv/res/prod.pkl"
-    ##sim_sys = S2PSimilarity(model_file, ort_format, embed_file)
-
-    ### C2: Case of Prod Use, Load data
-    ##sim_sys.load_data()                                      # Load previously embedded data
-
-    ### C2: Cold Start Insertion
-    ##for data in datum:
-    ##    sim_sys.insert_largetext(text, meta_data)            # Load new corpus of data
-
-    ### C2: Hot Running
-    ##while request:
-    ##    query_embed = sim_sys.get_embedding(request.text)
-    ##    res = sim_sys.find_phrase(query_embed, k_val=5)
-    ##    print(res['top_sites'], res['top_contexts'])
-
+        return results	

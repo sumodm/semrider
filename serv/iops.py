@@ -11,6 +11,11 @@ def lazy_csv_reader(csvfile):
     for row in r:
       yield row
 
+def lazy_txt_reader(txtfile, delimiter='|'):
+  with open(txtfile) as f:
+      for line in f:
+          yield line.split("|")
+
 
 def csv_writer(csvfile, text):
   with open(csvfile, 'a') as file: 

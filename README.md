@@ -27,6 +27,14 @@
    - This will take about 10-12 hrs if you don't have embed_data and meta_file or your are reindexing, else about 1min
 
 #### Using It
-1. 
+1. Install the plugin in chrome in developer mode. To do this see below
+   - How to install unpacked: https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked
+   - Do the above for the folder client/plugin
+   - Now enable the plugin for all sites, go to manage extensions, in select semrider and then in site access choose all sites
+   - Now your plugin is running
 
-2. 
+2. Running the server
+  - Activate virtual environment as mentioned in step 1 of Basic
+  - Now run the flask server program, with `python serv/server.py`
+  - If the program successfully runs, you should see text of any site you visited being displayed as the output of previous step
+  - Now if you search in semrider plugin, it should return you results

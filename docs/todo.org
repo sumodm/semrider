@@ -23,7 +23,7 @@
 **** [x] v0.0.3: AL: Complete production use case code and test thoroughly
 **** [x] v0.0.3: AL: Move production code to server.py, test remaining
 **** [x] v0.0.3: AL: Remove deadcode and files (first-task)
-**** [ ] v0.0.3: SR: Document start, update requirements & test once (first-task)
+**** [x] v0.0.3: SR: Document start, update requirements & test once (first-task)
 **** [ ] v0.0.3: SR: Remove duplicate URLS (first-task)
 **** [ ] v0.0.3: SR: AtExit does not seem to work if you trap signals (first-task)
           https://stackoverflow.com/questions/40866576/run-atexit-when-python-process-is-killed)

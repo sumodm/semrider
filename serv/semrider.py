@@ -1,5 +1,5 @@
 import serv.iops as iops
-import serv.algo2 as alg
+import serv.algo as alg
 
 model_file = "sentence-transformers/multi-qa-mpnet-base-dot-v1"
 ort_format = "serv/res/traced_bert.onnx"
@@ -10,7 +10,8 @@ cold_file = "serv/data/ch_1april23_2lines.txt"
 sim_sys = alg.S2PSimilarity(model_file, ort_format)
 
 
-def save_data():
+def save_data(embed_file, meta_file):
+    sim_sys.save_data(embed_file, meta_file)
     return
 
 def load_data(embed_file, meta_file):

@@ -1,6 +1,6 @@
 import numpy as np
 import serv.iops as iops
-import serv.algo2 as alg
+import serv.algo as alg
 
 
 def test_algo():

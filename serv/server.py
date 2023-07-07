@@ -7,12 +7,12 @@ import serv.semrider as sm
 
 app = Flask(__name__)
 CORS(app)
-embed_file = "serv/res/embed_train_v02_rc.pkl"
-meta_file = "serv/res/meta_train_v02_rc.pkl"
+embed_file = "serv/res/embed_prod_v02_rc.pkl"
+meta_file = "serv/res/meta_prod_v02_rc.pkl"
 sm.load_data(embed_file, meta_file)
 
 def dump_files(*args):
-    sm.save_data()
+    sm.save_data(embed_file, meta_file)
     exit()
 
 

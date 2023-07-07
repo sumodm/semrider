@@ -22,14 +22,14 @@
 **** [x] v0.0.3: AL: Move test code into separate test_algo.py
 **** [x] v0.0.3: AL: Complete production use case code and test thoroughly
 **** [x] v0.0.3: AL: Move production code to server.py, test remaining
+**** [x] v0.0.3: AL: Remove deadcode and files (first-task)
+**** [ ] v0.0.3: SR: Document start, update requirements & test once (first-task)
+**** [ ] v0.0.3: SR: Remove duplicate URLS (first-task)
 **** [ ] v0.0.3: SR: AtExit does not seem to work if you trap signals (first-task)
           https://stackoverflow.com/questions/40866576/run-atexit-when-python-process-is-killed)
-**** [ ] v0.0.3: AL: Remove deadcode and files (first-task)
-**** [ ] v0.0.3: SR: Document start, update requirements & test once (first-task)
 **** [ ] v0.0.3: SR: Store and send back page title (first-task)
 ***** [ ] v0.0.3: BE: Capture page title & store in database, update API to return same
 ***** [ ] v0.0.3: UI: Show page title, truncate when too large and show ...
-**** [ ] v0.0.3: SR: Remove duplicate URLS (first-task)
 **** [ ] v0.0.3: SR: Datetime handle (first-task)
 ***** [ ] v0.0.3: UI: Send datetime as well, handle same in BE
 ***** [ ] v0.0.x: SR: Store datetime and return with datetime
@@ -55,6 +55,9 @@
 *** [ ] v0.0.4: PD: HN Scalable (upto 100 req/s on single server, Experimental)
 **** [ ] v0.0.4: EX: Scalable version exploration
 ** Bucket List
+*** [ ] v0.0.x: PD: Privacy, mark out private communications separately
+*** [ ] v0.0.x: PD: Ability to 
+*** [ ] v0.0.x: PD: Ability to group website from clusters and make notes easily (use summary to provide grouping)
 *** [ ] v0.0.x: BE: Common site specific parsers, to clean input (reddit, hnews, Goog etc)
 *** [ ] v0.0.x: BE: Add HN parser (remove extraneous stuff)
 *** [ ] v0.0.x: BE: Add Confluence parser

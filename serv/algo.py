@@ -57,14 +57,22 @@ class S2PSimilarity:
               - status: Boolean
         '''
         status = True
-
+        
         if not (embed_file and meta_file):
             return False
-
-        if embed_file: pkl.dump(self.embed_data, open(embed_file, "wb"))
+        # breakpoint()
+        if embed_file and len(self.embed_data) != 0: 
+            with open(embed_file, 'wb') as f:
+                print(f'Pickle embed data: {self.embed_data}')
+                pkl.dump(self.embed_data, f)
+            
+            # pkl.dump(self.embed_data, open(embed_file, "wb"))
         else: status = False
         
-        if meta_file: pkl.dump(self.meta_data, open(meta_file, "wb"))
+        if meta_file and len(self.meta_data) != 0:
+            with open(meta_file, 'wb') as f:
+                print(f'Pickle meta data: {self.meta_data}')
+                pkl.dump(self.meta_data, f)
         else: status = False
 
         return status
@@ -155,6 +163,8 @@ class S2PSimilarity:
         for chunke in chunkes_gen:
           self.embed_data = np.vstack([self.embed_data, chunke])
 
+        print(f'Update done for the following url {url}')
+
         return True
 
         # TODO: Then update test_phrase and find_phrase
@@ -170,9 +180,17 @@ class S2PSimilarity:
         top_idxs = np.argsort(-np.max(scores, axis=1))[:k_val] #Get max of all chunks in kword & neg for descending
         top_scores = np.sort(-np.max(scores, axis=1))[:k_val]
         top_k_urls = []
-        for idx, item in enumerate(top_idxs):
-            print(str(idx) + " " + str(top_scores[idx]) + " " + self.rev_data[item])
-            top_k_urls.append((self.rev_data[item], ''))       # TODO: Update the '' with actual title
+        print("+++++++++++++++++++++++++++++++++++")
+        print(self.rev_data, top_idxs, self.meta_data)
+        try:
+            for idx, item in enumerate(top_idxs):
+                top_k_urls.append((self.rev_data[item], self.meta_data[self.rev_data[item]]))
+        except KeyError:
+            print(f'KeyError detected, returning null {top_idxs}')
+            return [], []
+        # for idx, item in enumerate(top_idxs):
+        #     print(str(idx) + " " + str(top_scores[idx]) + " " + self.rev_data[item])
+        #     top_k_urls.append((self.rev_data[item], ''))       # TODO: Update the '' with actual title
  
         #top_idxs = np.argsort(scores.flatten())
         return top_idxs, top_k_urls

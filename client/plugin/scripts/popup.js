@@ -32,21 +32,26 @@ function searchAPI(keywords, resultsCount) {
 function displayResults(top_sites, top_context) {
   var resultsContainer = document.getElementById('results-container');
   resultsContainer.innerHTML = '';
+  
+  if(top_sites.length == 0){
+    // Say key error and not found
+    resultsContainer.innerHTML = 'No Links found!!!'
+  }
+  else {
+    for (var i = 0; i < top_sites.length; i++) {
+      var item = top_sites[i];
+      var value = top_context[i];
+      var resultNumb = document.createElement('div');
+      resultNumb.textContent = (i+1) + '. ';
+      //, Matches: ' + value;
 
-  for (var i = 0; i < top_sites.length; i++) {
-    var item = top_sites[i];
-    var value = top_context[i];
+      var resultText = document.createElement('a');
+      var createAText = document.createTextNode(value.title);
+      resultText.setAttribute('href', item);
+      resultText.appendChild(createAText);
 
-    var resultNumb = document.createElement('div');
-    resultNumb.textContent = (i+1) + '. ';
-    //, Matches: ' + value;
-
-    var resultText = document.createElement('a');
-    var createAText = document.createTextNode(item);
-    resultText.setAttribute('href', item);
-    resultText.appendChild(createAText);
-
-    resultsContainer.appendChild(resultNumb).appendChild(resultText);
-    //resultsContainer.appendChild(resultText);
+      resultsContainer.appendChild(resultNumb).appendChild(resultText);
+      //resultsContainer.appendChild(resultText);
+    }
   }
 }

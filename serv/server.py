@@ -51,6 +51,10 @@ def search():
     question = request.json.get('question')
     number_of_results = int(request.json.get('number_of_results'))
     results = sm.find(question, number_of_results)
+
+    if results == []:
+        return jsonify({'top_sites':[], 'top_context':[]})
+
     print(f'+++++++++++++++++++++++++++++++++++++++++++')
     print(f'{[t["title"] for u, t in results]}')
     results = {'top_sites': [u for u,t in results], 'top_context': [t for u,t in results]}
@@ -59,6 +63,5 @@ def search():
 
 signal.signal(signal.SIGINT, dump_files)
 
-
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, use_reloader=False)

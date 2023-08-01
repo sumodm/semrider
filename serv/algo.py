@@ -69,7 +69,7 @@ class S2PSimilarity:
             # pkl.dump(self.embed_data, open(embed_file, "wb"))
         else: status = False
         
-        if meta_file and self.meta_data != {}:
+        if meta_file and len(self.meta_data) != 0:
             with open(meta_file, 'wb') as f:
                 print(f'Pickle meta data: {self.meta_data}')
                 pkl.dump(self.meta_data, f)
@@ -182,9 +182,12 @@ class S2PSimilarity:
         top_k_urls = []
         print("+++++++++++++++++++++++++++++++++++")
         print(self.rev_data, top_idxs, self.meta_data)
-        for idx, item in enumerate(top_idxs):
-            top_k_urls.append((self.rev_data[item], self.meta_data[self.rev_data[item]]))
-
+        try:
+            for idx, item in enumerate(top_idxs):
+                top_k_urls.append((self.rev_data[item], self.meta_data[self.rev_data[item]]))
+        except KeyError:
+            print(f'KeyError detected, returning null {top_idxs}')
+            return [], []
         # for idx, item in enumerate(top_idxs):
         #     print(str(idx) + " " + str(top_scores[idx]) + " " + self.rev_data[item])
         #     top_k_urls.append((self.rev_data[item], ''))       # TODO: Update the '' with actual title

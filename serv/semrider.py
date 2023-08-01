@@ -1,5 +1,7 @@
 import serv.iops as iops
 import serv.algo as alg
+import os
+
 
 model_file = "sentence-transformers/multi-qa-mpnet-base-dot-v1"
 ort_format = "serv/res/traced_bert.onnx"
@@ -7,7 +9,9 @@ embed_file = "serv/res/embed_train_v02_rc.pkl"
 meta_file = "serv/res/meta_train_v02_rc.pkl"
 rawdata_file = "serv/data/prod_rawtext.csv"
 cold_file = "serv/data/ch_1april23_2lines.txt"
+
 sim_sys = alg.S2PSimilarity(model_file, ort_format)
+
 
 
 def save_data(embed_file, meta_file):
@@ -32,8 +36,8 @@ def insert_cold_data(cold_file, label='prod'):
         sim_sys.insert_largetext(url, meta_data_value, text) # Load new corpus of data
 
 
-def update(url, text, label='prod'):
-    meta_data_value = {'label':'prod', 'emd_indxs':[]}
+def update(url, text, date, title, label='prod'):
+    meta_data_value = {'label':'prod', 'emd_indxs':[], 'date':date, 'title':title}
     sim_sys.insert_largetext(url, meta_data_value, text) # Load new corpus of data
     return True
 

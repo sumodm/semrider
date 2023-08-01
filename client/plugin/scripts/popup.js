@@ -36,13 +36,12 @@ function displayResults(top_sites, top_context) {
   for (var i = 0; i < top_sites.length; i++) {
     var item = top_sites[i];
     var value = top_context[i];
-
     var resultNumb = document.createElement('div');
     resultNumb.textContent = (i+1) + '. ';
     //, Matches: ' + value;
 
     var resultText = document.createElement('a');
-    var createAText = document.createTextNode(item);
+    var createAText = document.createTextNode(value.title);
     resultText.setAttribute('href', item);
     resultText.appendChild(createAText);
 

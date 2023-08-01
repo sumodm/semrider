@@ -181,9 +181,9 @@ class S2PSimilarity:
         top_scores = np.sort(-np.max(scores, axis=1))[:k_val]
         top_k_urls = []
         print("+++++++++++++++++++++++++++++++++++")
-        print(self.rev_data, top_idxs)
+        print(self.rev_data, top_idxs, self.meta_data)
         for idx, item in enumerate(top_idxs):
-            top_k_urls.append((self.rev_data[item], ''))
+            top_k_urls.append((self.rev_data[item], self.meta_data[self.rev_data[item]]))
 
         # for idx, item in enumerate(top_idxs):
         #     print(str(idx) + " " + str(top_scores[idx]) + " " + self.rev_data[item])

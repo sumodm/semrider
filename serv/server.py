@@ -51,6 +51,8 @@ def search():
     question = request.json.get('question')
     number_of_results = int(request.json.get('number_of_results'))
     results = sm.find(question, number_of_results)
+    print(f'+++++++++++++++++++++++++++++++++++++++++++')
+    print(f'{[t["title"] for u, t in results]}')
     results = {'top_sites': [u for u,t in results], 'top_context': [t for u,t in results]}
     return jsonify(results)
 

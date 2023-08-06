@@ -32,8 +32,8 @@ def insert_cold_data(cold_file, label='prod'):
         sim_sys.insert_largetext(url, meta_data_value, text) # Load new corpus of data
 
 
-def update(url, text, label='prod'):
-    meta_data_value = {'label':'prod', 'emd_indxs':[]}
+def update(url, text, date, title, label='prod'):
+    meta_data_value = {'label':'prod', 'emd_indxs':[], 'date':date, 'title':title}
     sim_sys.insert_largetext(url, meta_data_value, text) # Load new corpus of data
     return True
 

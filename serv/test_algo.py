@@ -13,7 +13,7 @@ def test_algo():
     eval_file = "serv/data/eval_100_samples.csv"
     rawdata_file = "serv/data/rawtext.csv"
     sim_evltr = alg.S2PSimilarity(model_file, ort_format)
-    DO_ADD_TRAIN = False
+    DO_ADD_TRAIN = True
     DO_ADD_TEST = False
     DO_EVAL = True
 

@@ -58,13 +58,20 @@ class S2PSimilarity:
         '''
         status = True
 
+        print(f'Embed data is as follows: {self.embed_data}')
+        print(f'Meta data is as follows: {self.meta_data}')
+
         if not (embed_file and meta_file):
             return False
 
-        if embed_file: pkl.dump(self.embed_data, open(embed_file, "wb"))
+        if embed_file and len(self.embed_data) != 0: 
+            with open(embed_file, 'wb') as f:
+                pkl.dump(self.embed_data, f)
         else: status = False
         
-        if meta_file: pkl.dump(self.meta_data, open(meta_file, "wb"))
+        if meta_file and len(self.meta_data) != 0: 
+            with open(meta_file, 'wb') as f:
+                pkl.dump(self.meta_data, f)
         else: status = False
 
         return status
@@ -155,6 +162,11 @@ class S2PSimilarity:
         for chunke in chunkes_gen:
           self.embed_data = np.vstack([self.embed_data, chunke])
 
+        # print(f'Updated embeddings for the following url : {url} with embeddings as follows : {self.embed_data}')
+        # print('')
+        # print('')
+        print(f'Updated meta data for the following url : {url} is as follows : {self.meta_data}')
+        
         return True
 
         # TODO: Then update test_phrase and find_phrase
@@ -172,7 +184,7 @@ class S2PSimilarity:
         top_k_urls = []
         for idx, item in enumerate(top_idxs):
             print(str(idx) + " " + str(top_scores[idx]) + " " + self.rev_data[item])
-            top_k_urls.append((self.rev_data[item], ''))       # TODO: Update the '' with actual title
+            top_k_urls.append((self.rev_data[item], self.meta_data[self.rev_data[item]]))       # TODO: Update the '' with actual title
  
         #top_idxs = np.argsort(scores.flatten())
         return top_idxs, top_k_urls

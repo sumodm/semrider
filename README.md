@@ -12,6 +12,7 @@
    - `virtualenv venv`
    - `source venv/bin/activate`
    - `pip install -r serv/requirements.txt`
+   - `export PYTHONPATH=$PYTHONPATH: `` pwd `` `
 2. Ensure that you have fetched all files
    - Create serv/res folder if one is not there, and get `meta_train_*.pkl` and `embed_train_*.pkl` inside res
      - git lfs pull <filename>

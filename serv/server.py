@@ -25,9 +25,15 @@ def dump_files(*args):
 def update():
     received_text = request.json.get('text')
     site = request.json.get('site')
+    date = request.json.get('date')
+    title = request.json.get('title')
+
     print(f'Received Data: {received_text}')
     print(f'Received site: {site}')
-    if sm.update(site, received_text):
+    print(f'Received date: {date}')
+    print(f'Received title: {title}')
+
+    if sm.update(site, received_text, date, title):
         return jsonify({'status': 'success'})
     else:
         return jsonify({'status': 'failed'})

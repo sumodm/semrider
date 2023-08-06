@@ -42,7 +42,7 @@ function displayResults(top_sites, top_context) {
     //, Matches: ' + value;
 
     var resultText = document.createElement('a');
-    var createAText = document.createTextNode(item);
+    var createAText = document.createTextNode(value.title);
     resultText.setAttribute('href', item);
     resultText.appendChild(createAText);
 

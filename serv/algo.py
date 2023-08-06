@@ -162,9 +162,9 @@ class S2PSimilarity:
         for chunke in chunkes_gen:
           self.embed_data = np.vstack([self.embed_data, chunke])
 
-        print(f'Updated embeddings for the following url : {url} with embeddings as follows : {self.embed_data}')
-        print('')
-        print('')
+        # print(f'Updated embeddings for the following url : {url} with embeddings as follows : {self.embed_data}')
+        # print('')
+        # print('')
         print(f'Updated meta data for the following url : {url} is as follows : {self.meta_data}')
         
         return True
@@ -184,7 +184,7 @@ class S2PSimilarity:
         top_k_urls = []
         for idx, item in enumerate(top_idxs):
             print(str(idx) + " " + str(top_scores[idx]) + " " + self.rev_data[item])
-            top_k_urls.append((self.rev_data[item], ''))       # TODO: Update the '' with actual title
+            top_k_urls.append((self.rev_data[item], self.meta_data[self.rev_data[item]]))       # TODO: Update the '' with actual title
  
         #top_idxs = np.argsort(scores.flatten())
         return top_idxs, top_k_urls

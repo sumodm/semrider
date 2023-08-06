@@ -5,3 +5,4 @@ scratch/*
 client/plugin3/*
 client/plugin4/*
 */__pycache__/*
+*.pkl

@@ -1,8 +1,16 @@
+import os
 import csv
 import sys
 import requests
 from bs4 import BeautifulSoup
 
+def cleanup(embed_file, meta_file, clean = True):
+   if clean:
+      if os.path.exists(embed_file):
+         os.remove(embed_file)
+      
+      if os.path.exists(meta_file):
+         os.remove(meta_file)
 
 def lazy_csv_reader(csvfile):
   with open(csvfile) as f:
